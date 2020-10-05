@@ -65,9 +65,19 @@ type syntax struct {
 	Content string `yaml:"content,omitempty"`
 }
 
+func (s syntax) MarshalYAML() (interface{}, error) {
+	s.Content = verbatim(s.Content)
+	return s, nil
+}
+
 type example struct {
 	Content string `yaml:"content,omitempty"`
 	Name    string `yaml:"name,omitempty"`
+}
+
+func (ex example) MarshalYAML() (interface{}, error) {
+	ex.Content = verbatim(ex.Content)
+	return ex, nil
 }
 
 // item represents a DocFX item.
@@ -411,4 +421,8 @@ func processExamples(exs []*doc.Example, fset *token.FileSet) []example {
 		})
 	}
 	return result
+}
+
+func verbatim(s string) string {
+	return "{% verbatim %}" + s + "{% endverbatim %}"
 }
