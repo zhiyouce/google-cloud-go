@@ -52,24 +52,24 @@ echo "Is python available?"
 python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))'
 
 # Remove old nox
-# python3.6 -m pip uninstall --yes --quiet nox-automation
-# # Install nox
-# python3.6 -m pip install --upgrade --quiet nox
-# python3.6 -m nox --version
+python3.6 -m pip uninstall --yes --quiet nox-automation
+# Install nox
+python3.6 -m pip install --upgrade --quiet nox
+python3.6 -m nox --version
 
-# # create a unique id for this run
-# UUID=$(python  -c 'import uuid; print(uuid.uuid1())' | head -c 7)
-# export ENVCTL_ID=ci-$UUID
-# echo $ENVCTL_ID
+# create a unique id for this run
+UUID=$(python  -c 'import uuid; print(uuid.uuid1())' | head -c 7)
+export ENVCTL_ID=ci-$UUID
+echo $ENVCTL_ID
 
-# # Run the specified environment test
-# set +e
-# python3.6 -m nox --session "tests(language='go', platform='$ENVIRONMENT')"
-# TEST_STATUS_CODE=$?
+# Run the specified environment test
+set +e
+python3.6 -m nox --session "tests(language='go', platform='$ENVIRONMENT')"
+TEST_STATUS_CODE=$?
 
-# # destroy resources
-# echo "cleaning up..."
-# ${PROJECT_ROOT}/tests/environment/envctl/envctl python $ENVIRONMENT destroy
+# destroy resources
+echo "cleaning up..."
+${PROJECT_ROOT}/tests/environment/envctl/envctl python $ENVIRONMENT destroy
 
-# # exit with proper status code
-# exit $TEST_STATUS_CODE
+# exit with proper status code
+exit $TEST_STATUS_CODE
