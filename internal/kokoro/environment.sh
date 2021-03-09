@@ -13,23 +13,63 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# A suite of tests offered by https://github.com/googleapis/env-tests-logging
+# That allows deploying and testing features in live GCP services.
+# Currently only configured to test logging & error reporting
+
 set -eox pipefail
 
-echo "Executing environment script"
+# Test prechecks
 if [[ -z "${ENVIRONMENT:-}" ]]; then
   echo "ENVIRONMENT not set. Exiting"
   exit 1
 fi
 
-# TODO get things running locally first
-
-# TODO update this
 if [[ -z "${PROJECT_ROOT:-}"  ]]; then
     PROJECT_ROOT="github/google-cloud-go"
 fi
 
-# Code under repo is checked out to ${KOKORO_ARTIFACTS_DIR}/github.
-# The final directory name in this path is determined by the scm name specified
-# in the job configuration.
-cd "${KOKORO_ARTIFACTS_DIR}/github/google-cloud-go"
-pwd
+# Add the test module as a submodule to the repo.
+cd "${KOKORO_ARTIFACTS_DIR}/github/google-cloud-go/internal/"
+git submodule add https://github.com/googleapis/env-tests-logging
+cd "${PROJECT_ROOT}/internal/env-tests-logging/"
+
+# Disable buffering, so that the logs stream through.
+# TODO double check if I need this
+export PYTHONUNBUFFERED=1
+
+# Debug: show build environment
+env | grep KOKORO
+
+# Set up service account credentials
+# TODO(nicolezhu) Check with Go team to use dulcet-port-762 project instead
+# export GOOGLE_APPLICATION_CREDENTIALS=$KOKORO_KEYSTORE_DIR/72523_go_integration_service_account
+# export PROJECT_ID="log-bench"
+# gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+
+
+echo "Is python available?"
+python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))'
+
+# Remove old nox
+# python3.6 -m pip uninstall --yes --quiet nox-automation
+# # Install nox
+# python3.6 -m pip install --upgrade --quiet nox
+# python3.6 -m nox --version
+
+# # create a unique id for this run
+# UUID=$(python  -c 'import uuid; print(uuid.uuid1())' | head -c 7)
+# export ENVCTL_ID=ci-$UUID
+# echo $ENVCTL_ID
+
+# # Run the specified environment test
+# set +e
+# python3.6 -m nox --session "tests(language='go', platform='$ENVIRONMENT')"
+# TEST_STATUS_CODE=$?
+
+# # destroy resources
+# echo "cleaning up..."
+# ${PROJECT_ROOT}/tests/environment/envctl/envctl python $ENVIRONMENT destroy
+
+# # exit with proper status code
+# exit $TEST_STATUS_CODE
