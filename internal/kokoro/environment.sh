@@ -32,7 +32,7 @@ fi
 # Add the test module as a submodule to the repo.
 cd "${KOKORO_ARTIFACTS_DIR}/github/google-cloud-go/internal/"
 git submodule add https://github.com/googleapis/env-tests-logging
-cd "${PROJECT_ROOT}/internal/env-tests-logging/"
+cd "env-tests-logging/"
 
 # Disable buffering, so that the logs stream through.
 # TODO double check if I need this
