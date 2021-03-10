@@ -61,14 +61,13 @@ echo $ENVCTL_ID
 
 # Run the specified environment test
 set +e
-# python3 -m nox --session "tests(language='go', platform='$ENVIRONMENT')"
-# nox --python 3.6
-nox --python 3.7 --session "tests(language='go', platform='$ENVIRONMENT')"
+./envctl/envctl go $ENVIRONMENT deploy
+# nox --python 3.7 --session "tests(language='go', platform='$ENVIRONMENT')"
 TEST_STATUS_CODE=$?
 
 # destroy resources
 echo "cleaning up..."
-${PROJECT_ROOT}/tests/environment/envctl/envctl python $ENVIRONMENT destroy
+./envctl/envctl go $ENVIRONMENT destroy
 
 # exit with proper status code
 exit $TEST_STATUS_CODE
