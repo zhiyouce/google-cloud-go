@@ -44,18 +44,14 @@ env | grep KOKORO
 # Set up service account credentials
 # TODO(nicolezhu) Check with Go team to use dulcet-port-762 project instead
 # export GOOGLE_APPLICATION_CREDENTIALS=$KOKORO_KEYSTORE_DIR/72523_go_integration_service_account
-# export PROJECT_ID="log-bench"
+export PROJECT_ID="log-bench"
 # gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
 
-
-echo "Is python available?"
-python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))'
-
 # Remove old nox
-python3.6 -m pip uninstall --yes --quiet nox-automation
+python3 -m pip uninstall --yes --quiet nox-automation
 # Install nox
-python3.6 -m pip install --upgrade --quiet nox
-python3.6 -m nox --version
+python3 -m pip install --upgrade --quiet nox
+python3 -m nox --version
 
 # create a unique id for this run
 UUID=$(python  -c 'import uuid; print(uuid.uuid1())' | head -c 7)
