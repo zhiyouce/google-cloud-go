@@ -48,6 +48,7 @@ export PROJECT_ID="log-bench"
 # gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
 
 # Remove old nox
+python3 --version
 python3 -m pip uninstall --yes --quiet nox-automation
 # Install nox
 python3 -m pip install --upgrade --quiet nox
