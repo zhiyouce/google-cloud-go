@@ -61,7 +61,9 @@ echo $ENVCTL_ID
 
 # Run the specified environment test
 set +e
-python3 -m nox --session "tests(language='go', platform='$ENVIRONMENT')"
+# python3 -m nox --session "tests(language='go', platform='$ENVIRONMENT')"
+# nox --python 3.6
+nox --python 3.7 --session "tests(language='go', platform='$ENVIRONMENT')"
 TEST_STATUS_CODE=$?
 
 # destroy resources
