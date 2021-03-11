@@ -43,9 +43,14 @@ env | grep KOKORO
 
 # Set up service account credentials
 # TODO(nicolezhu) Check with Go team to use dulcet-port-762 project instead
-# export GOOGLE_APPLICATION_CREDENTIALS=$KOKORO_KEYSTORE_DIR/72523_go_integration_service_account
-export PROJECT_ID="log-bench"
-# gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+export GOOGLE_APPLICATION_CREDENTIALS=$KOKORO_KEYSTORE_DIR/75914_env_test_kokoro
+gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+export PROJECT_ID="go-logging-client-development"
+gcloud config set project $PROJECT_ID
+gcloud config set compute/zone us-central1-b
+
+# Authenticate docker
+gcloud auth configure-docker -q
 
 # Remove old nox
 python3 --version
