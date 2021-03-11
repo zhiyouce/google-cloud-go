@@ -43,8 +43,7 @@ env | grep KOKORO
 
 # Set up service account credentials
 # TODO(nicolezhu): Use dulcet-port-762 project instead in prod
-export GOOGLE_APPLICATION_CREDENTIALS=$KOKORO_KEYSTORE_DIR/75914_env_test_kokoro
-ls $KOKORO_KEYSTORE_DIR/
+export GOOGLE_APPLICATION_CREDENTIALS=$KOKORO_KEYSTORE_DIR/75914_env-test-kokoro
 gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
 export PROJECT_ID="go-logging-client-development"
 gcloud config set project $PROJECT_ID
