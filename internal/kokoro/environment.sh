@@ -54,14 +54,12 @@ gcloud auth configure-docker -q
 
 # Remove old nox
 python3 --version
-
-add-apt-repository ppa:deadsnakes/ppa
 apt-get update
 apt-get install python3.8
 python3 -V
 
-python3 -m pip uninstall --yes --quiet nox-automation
 # Install nox
+python3 -m pip uninstall --yes --quiet nox-automation
 python3 -m pip install --upgrade --quiet nox
 python3 -m nox --version
 
