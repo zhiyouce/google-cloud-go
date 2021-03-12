@@ -54,10 +54,17 @@ gcloud auth configure-docker -q
 
 # Remove old nox
 python3 --version
+sudo apt update -y
+sudo apt install python3.8
+sudo rm /usr/bin/python3
+sudo ln -s python3.8 /usr/bin/python3
+python3 -V
+
 python3 -m pip uninstall --yes --quiet nox-automation
 # Install nox
 python3 -m pip install --upgrade --quiet nox
 python3 -m nox --version
+
 
 # create a unique id for this run
 UUID=$(python  -c 'import uuid; print(uuid.uuid1())' | head -c 7)
