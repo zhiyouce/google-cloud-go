@@ -54,9 +54,6 @@ gcloud auth configure-docker -q
 
 # Remove old nox
 python3 --version
-apt-get update
-apt-get install python3.8
-python3 -V
 
 # Install nox
 python3 -m pip uninstall --yes --quiet nox-automation
@@ -71,7 +68,7 @@ echo $ENVCTL_ID
 # Run the specified environment test
 set +e
 # ./envctl/envctl go $ENVIRONMENT deploy
-nox --session "tests(language='go', platform='$ENVIRONMENT')"
+nox --python 3.7 --session "tests(language='go', platform='$ENVIRONMENT')"
 TEST_STATUS_CODE=$?
 
 # destroy resources
