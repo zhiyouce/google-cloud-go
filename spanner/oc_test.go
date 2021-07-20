@@ -24,7 +24,7 @@ import (
 
 	"cloud.google.com/go/internal/testutil"
 	"cloud.google.com/go/internal/version"
-	stestutil "cloud.google.com/go/spanner/internal/testutil"
+	stestutil "cloud.google.com/go/spanner/testutil"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
 )

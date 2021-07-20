@@ -62,6 +62,7 @@ type MockedSpannerInMemTestServer struct {
 	TestSpanner       InMemSpannerServer
 	TestInstanceAdmin InMemInstanceAdminServer
 	server            *grpc.Server
+	Address           string
 }
 
 // NewMockedSpannerInMemTestServer creates a MockedSpannerInMemTestServer at
@@ -99,9 +100,9 @@ func (s *MockedSpannerInMemTestServer) setupMockedServerWithAddr(t *testing.T, a
 	}
 	go s.server.Serve(lis)
 
-	serverAddress := lis.Addr().String()
+	s.Address = lis.Addr().String()
 	opts := []option.ClientOption{
-		option.WithEndpoint(serverAddress),
+		option.WithEndpoint(s.Address),
 		option.WithGRPCDialOption(grpc.WithInsecure()),
 		option.WithoutAuthentication(),
 	}

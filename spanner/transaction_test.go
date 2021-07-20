@@ -26,7 +26,7 @@ import (
 	"testing"
 	"time"
 
-	. "cloud.google.com/go/spanner/internal/testutil"
+	. "cloud.google.com/go/spanner/testutil"
 	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/api/iterator"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"

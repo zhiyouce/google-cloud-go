@@ -22,7 +22,7 @@ import (
 	"testing"
 	"time"
 
-	. "cloud.google.com/go/spanner/internal/testutil"
+	. "cloud.google.com/go/spanner/testutil"
 	sppb "google.golang.org/genproto/googleapis/spanner/v1"
 )
 

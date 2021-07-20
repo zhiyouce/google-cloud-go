@@ -24,7 +24,7 @@ import (
 	"time"
 
 	vkit "cloud.google.com/go/spanner/apiv1"
-	. "cloud.google.com/go/spanner/internal/testutil"
+	. "cloud.google.com/go/spanner/testutil"
 	gax "github.com/googleapis/gax-go/v2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

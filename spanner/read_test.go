@@ -26,7 +26,7 @@ import (
 	"time"
 
 	vkit "cloud.google.com/go/spanner/apiv1"
-	. "cloud.google.com/go/spanner/internal/testutil"
+	. "cloud.google.com/go/spanner/testutil"
 	"github.com/golang/protobuf/proto"
 	proto3 "github.com/golang/protobuf/ptypes/struct"
 	structpb "github.com/golang/protobuf/ptypes/struct"

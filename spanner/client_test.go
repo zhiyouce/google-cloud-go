@@ -29,7 +29,7 @@ import (
 	"cloud.google.com/go/civil"
 	itestutil "cloud.google.com/go/internal/testutil"
 	vkit "cloud.google.com/go/spanner/apiv1"
-	. "cloud.google.com/go/spanner/internal/testutil"
+	. "cloud.google.com/go/spanner/testutil"
 	structpb "github.com/golang/protobuf/ptypes/struct"
 	gax "github.com/googleapis/gax-go/v2"
 	"google.golang.org/api/iterator"
