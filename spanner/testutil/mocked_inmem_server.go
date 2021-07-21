@@ -88,6 +88,7 @@ func NewMockedSpannerInMemTestServerWithAddr(t *testing.T, addr string) (mockedS
 func (s *MockedSpannerInMemTestServer) setupMockedServerWithAddr(t *testing.T, addr string) []option.ClientOption {
 	s.TestSpanner = NewInMemSpannerServer()
 	s.TestInstanceAdmin = NewInMemInstanceAdminServer()
+	s.setupSelect1Result()
 	s.setupFooResults()
 	s.setupSingersResults()
 	s.server = grpc.NewServer()
@@ -107,6 +108,11 @@ func (s *MockedSpannerInMemTestServer) setupMockedServerWithAddr(t *testing.T, a
 		option.WithoutAuthentication(),
 	}
 	return opts
+}
+
+func (s *MockedSpannerInMemTestServer) setupSelect1Result() {
+	result := &StatementResult{Type: StatementResultResultSet, ResultSet: CreateSelect1ResultSet()}
+	s.TestSpanner.PutStatementResult("SELECT 1", result)
 }
 
 func (s *MockedSpannerInMemTestServer) setupFooResults() {
@@ -217,5 +223,31 @@ func createSingersRow(idx int64) *structpb.ListValue {
 	}
 	return &structpb.ListValue{
 		Values: rowValue,
+	}
+}
+
+func CreateSelect1ResultSet() *spannerpb.ResultSet {
+	fields := make([]*spannerpb.StructType_Field, 1)
+	fields[0] = &spannerpb.StructType_Field{
+		Name: "",
+		Type: &spannerpb.Type{Code: spannerpb.TypeCode_INT64},
+	}
+	rowType := &spannerpb.StructType{
+		Fields: fields,
+	}
+	metadata := &spannerpb.ResultSetMetadata{
+		RowType: rowType,
+	}
+	rows := make([]*structpb.ListValue, 1)
+	rowValue := make([]*structpb.Value, 1)
+	rowValue[0] = &structpb.Value{
+		Kind: &structpb.Value_StringValue{StringValue: "1"},
+	}
+	rows[0] = &structpb.ListValue{
+		Values: rowValue,
+	}
+	return &spannerpb.ResultSet{
+		Metadata: metadata,
+		Rows:     rows,
 	}
 }
