@@ -20,6 +20,7 @@ import (
 	"strconv"
 	"testing"
 
+	"encoding/base64"
 	structpb "github.com/golang/protobuf/ptypes/struct"
 	"google.golang.org/api/option"
 	instancepb "google.golang.org/genproto/googleapis/spanner/admin/instance/v1"
@@ -223,6 +224,65 @@ func createSingersRow(idx int64) *structpb.ListValue {
 	}
 	return &structpb.ListValue{
 		Values: rowValue,
+	}
+}
+
+func CreateResultSetWithAllTypes() *spannerpb.ResultSet {
+	fields := make([]*spannerpb.StructType_Field, 8)
+	fields[0] = &spannerpb.StructType_Field{
+		Name: "ColBool",
+		Type: &spannerpb.Type{Code: spannerpb.TypeCode_BOOL},
+	}
+	fields[1] = &spannerpb.StructType_Field{
+		Name: "ColString",
+		Type: &spannerpb.Type{Code: spannerpb.TypeCode_STRING},
+	}
+	fields[2] = &spannerpb.StructType_Field{
+		Name: "ColBytes",
+		Type: &spannerpb.Type{Code: spannerpb.TypeCode_BYTES},
+	}
+	fields[3] = &spannerpb.StructType_Field{
+		Name: "ColInt",
+		Type: &spannerpb.Type{Code: spannerpb.TypeCode_INT64},
+	}
+	fields[4] = &spannerpb.StructType_Field{
+		Name: "ColFloat",
+		Type: &spannerpb.Type{Code: spannerpb.TypeCode_FLOAT64},
+	}
+	fields[5] = &spannerpb.StructType_Field{
+		Name: "ColNumeric",
+		Type: &spannerpb.Type{Code: spannerpb.TypeCode_NUMERIC},
+	}
+	fields[6] = &spannerpb.StructType_Field{
+		Name: "ColDate",
+		Type: &spannerpb.Type{Code: spannerpb.TypeCode_DATE},
+	}
+	fields[7] = &spannerpb.StructType_Field{
+		Name: "ColTimestamp",
+		Type: &spannerpb.Type{Code: spannerpb.TypeCode_TIMESTAMP},
+	}
+	rowType := &spannerpb.StructType{
+		Fields: fields,
+	}
+	metadata := &spannerpb.ResultSetMetadata{
+		RowType: rowType,
+	}
+	rows := make([]*structpb.ListValue, 1)
+	rowValue := make([]*structpb.Value, 8)
+	rowValue[0] = &structpb.Value{Kind: &structpb.Value_BoolValue{BoolValue: true}}
+	rowValue[1] = &structpb.Value{Kind: &structpb.Value_StringValue{StringValue: "test"}}
+	rowValue[2] = &structpb.Value{Kind: &structpb.Value_StringValue{StringValue: base64.StdEncoding.EncodeToString([]byte("testbytes"))}}
+	rowValue[3] = &structpb.Value{Kind: &structpb.Value_StringValue{StringValue: "5"}}
+	rowValue[4] = &structpb.Value{Kind: &structpb.Value_NumberValue{NumberValue: 3.14}}
+	rowValue[5] = &structpb.Value{Kind: &structpb.Value_StringValue{StringValue: "6.626"}}
+	rowValue[6] = &structpb.Value{Kind: &structpb.Value_StringValue{StringValue: "2021-07-21"}}
+	rowValue[7] = &structpb.Value{Kind: &structpb.Value_StringValue{StringValue: "2021-07-21T21:07:59.339911800Z"}}
+	rows[0] = &structpb.ListValue{
+		Values: rowValue,
+	}
+	return &spannerpb.ResultSet{
+		Metadata: metadata,
+		Rows:     rows,
 	}
 }
 
