@@ -1782,7 +1782,6 @@ func TestIntegration_BasicTypes(t *testing.T) {
 			t.Fatalf("Unable to fetch row %v: %v", i, err)
 		}
 		verifyDirectPathRemoteAddress(t)
-
 		// Create new instance of type of test.want.
 		want := test.want
 		if want == nil {
