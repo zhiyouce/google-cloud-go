@@ -16,6 +16,7 @@ package testutil
 
 import (
 	"fmt"
+	databasepb "google.golang.org/genproto/googleapis/spanner/admin/database/v1"
 	"net"
 	"strconv"
 	"testing"
@@ -62,6 +63,7 @@ const UpdateBarSetFooRowCount = 5
 type MockedSpannerInMemTestServer struct {
 	TestSpanner       InMemSpannerServer
 	TestInstanceAdmin InMemInstanceAdminServer
+	TestDatabaseAdmin InMemDatabaseAdminServer
 	server            *grpc.Server
 	Address           string
 }
@@ -82,6 +84,7 @@ func NewMockedSpannerInMemTestServerWithAddr(t *testing.T, addr string) (mockedS
 	return mockedServer, opts, func() {
 		mockedServer.TestSpanner.Stop()
 		mockedServer.TestInstanceAdmin.Stop()
+		mockedServer.TestDatabaseAdmin.Stop()
 		mockedServer.server.Stop()
 	}
 }
@@ -89,12 +92,14 @@ func NewMockedSpannerInMemTestServerWithAddr(t *testing.T, addr string) (mockedS
 func (s *MockedSpannerInMemTestServer) setupMockedServerWithAddr(t *testing.T, addr string) []option.ClientOption {
 	s.TestSpanner = NewInMemSpannerServer()
 	s.TestInstanceAdmin = NewInMemInstanceAdminServer()
+	s.TestDatabaseAdmin = NewInMemDatabaseAdminServer()
 	s.setupSelect1Result()
 	s.setupFooResults()
 	s.setupSingersResults()
 	s.server = grpc.NewServer()
 	spannerpb.RegisterSpannerServer(s.server, s.TestSpanner)
 	instancepb.RegisterInstanceAdminServer(s.server, s.TestInstanceAdmin)
+	databasepb.RegisterDatabaseAdminServer(s.server, s.TestDatabaseAdmin)
 
 	lis, err := net.Listen("tcp", addr)
 	if err != nil {
