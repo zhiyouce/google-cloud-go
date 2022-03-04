@@ -2,6 +2,17 @@
     "release-type": "go-yoshi",
     "include-component-in-tag": true,
     "tag-separator": "/",
+    "plugins": [
+        {
+            "type": "linked-versions",
+            "groupName": "test group",
+            "components": [
+                "aiplatform",
+                "gkehub",
+                "video"
+            ]
+        }
+    ],
     "packages": {
         "accessapproval": {
             "component": "accessapproval"
