@@ -36,6 +36,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/structpb"
 )
 
 // resourcePrefixHeader is the name of the metadata header used to indicate
@@ -335,6 +336,9 @@ type WriteResult struct {
 	// previously exist. Writes that do not actually change the document do
 	// not change the update time.
 	UpdateTime time.Time
+	// The results of applying each DocumentTransform.FieldTransform,
+	// in the same order.
+	TransformResults map[string]interface{}
 }
 
 func writeResultFromProto(wr *pb.WriteResult) (*WriteResult, error) {
@@ -343,7 +347,14 @@ func writeResultFromProto(wr *pb.WriteResult) (*WriteResult, error) {
 		t = time.Time{}
 		// TODO(jba): Follow up if Delete is supposed to return a nil timestamp.
 	}
-	return &WriteResult{UpdateTime: t}, nil
+	trv := wr.TransformResults
+	tr = structpb.NewList()
+
+	if err != nil {
+		tr = nil
+	}
+
+	return &WriteResult{UpdateTime: t, TransformResults: tr}, nil
 }
 
 func sleep(ctx context.Context, dur time.Duration) error {
