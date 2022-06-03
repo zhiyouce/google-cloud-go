@@ -4,7 +4,6 @@ go 1.15
 
 require (
 	cloud.google.com/go v0.102.0
-	github.com/googleapis/cloud-bigtable-cbt-cli v0.12.0
 	cloud.google.com/go/iam v0.3.0
 	github.com/golang/protobuf v1.5.2
 	github.com/google/btree v1.0.1
